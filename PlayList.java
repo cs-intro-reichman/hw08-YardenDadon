@@ -45,37 +45,38 @@ class PlayList {
     /** Returns the data of this list, as a string. Each track appears in a separate line. */
     //// For an efficient implementation, use StringBuilder.
     public String toString() {
-        StringBuilder word = new StringBuilder();
-        for (Track track : tracks){
+        StringBuilder word = new StringBuilder(); 
+
+        for (int i = 0; i < tracks.length; i++) {
+            Track track = tracks[i];
             word.append(track.toString());
             word.append(System.lineSeparator());
         }
-        return word.toString();
+        return word.toString(); //toString makes the track a string
     }
 
     /** Removes the last track from this list. If the list is empty, does nothing. */
      public void removeLast() {
-        if (size > 0){
-            tracks[size - 1] = null;
-            size--;
+        if (size != 0) {
+            tracks[size] = null; //Removes the track
+            size--; //Playlist is one song smaller
         }
-
     }
     
     /** Returns the total duration (in seconds) of all the tracks in this list.*/
     public int totalDuration() {
-        int seconds = 0;
+        int duration = 0;
         for (int i = 0; i < size; i++){
-            seconds = seconds + tracks[i].getDuration();
+            duration += tracks[i].getDuration();
         }
-        return seconds;
+        return duration;
     }
 
     /** Returns the index of the track with the given title in this list.
      *  If such a track is not found, returns -1. */
     public int indexOf(String title) {
         for (int i = 0; i < size; i++){
-            if (title.equals(tracks[size].getTitle())){
+            if (title.equals(tracks[i].getTitle())){
                 return i;
             }
         }
@@ -88,36 +89,35 @@ class PlayList {
      *  If i is negative or greater than the size of this list, or if the list
      *  is full, does nothing and returns false. Otherwise, inserts the track and
      *  returns true. */
-    public boolean add(int i, Track track) {
-        if (size == maxSize || i > maxSize || i < 0){
+    public boolean add(int i, Track track) { //i = where i want the song in the playlist
+        if (i < 0 || i > maxSize || size == maxSize){ //index of negative, bigger than playlist, at maxSize
             return false;
         }
-
-        if (size == 0 || i == size) {
-            add(track);
-        } 
-        else {
-            for (int j = size; j > i; j--) {
-                tracks[j] = tracks[j - 1];
+        if (size == 0|| i == size){ //if empty or adding song to the end of the playlist
+            add(track); //Side Affect: size++
+        } else{
+            for (int variable = size; variable > i; variable--){ //If adding a song in index2, all songs above move one up
+                tracks[variable] = tracks[variable - 1];
             }
-            tracks[i] = track;
+            tracks[i] = track; //add the songs in the hole left at index i
             size++;
         }
         return true;
-    }
+       }
+    
      
     /** Removes the track in the given index from this list.
      *  If the list is empty, or the given index is negative or too big for this list, 
      *  does nothing and returns -1. */
     public void remove(int i) {
-        if (size == maxSize || i > maxSize || i < 0) {
+        if (size == 0 || i < 0 || i > maxSize){
             return;
-        }
-        if (i < size && i >= 0){
-            for (int j = i; j < size ; j++){
-                tracks[j] = tracks[j+1];
+        }else {
+            tracks[i] = null; //make a hole
+            for (int variable = i; variable < size; variable++){ //Starting at the hole (i), every song above goes down 1
+            tracks[variable] = tracks[variable + 1];
             }
-            size--;
+            size--; //shrink playlist
         }
     }
 
@@ -125,20 +125,16 @@ class PlayList {
      *  If such a track is not found, or the list is empty, or the given index
      *  is negative or too big for this list, does nothing. */
     public void remove(String title) {
-        if (indexOf(title) != -1) {
-            remove(indexOf(title));
+        if (indexOf(title) != -1){ //if "title" is in the playlist
+            remove(indexOf(title)); //remove it
         }
     }
 
     /** Removes the first track from this list. If the list is empty, does nothing. */
     public void removeFirst() {
-        if (size > 0) {
-            for (int i = 0; i < size - 1; i++) {
-                tracks[i] = tracks[i+1];
-            }
-            tracks[size - 1] = null;
-            size--;
-        }
+       if (size != 0){
+        remove(0);
+       }
     }
     
     /** Adds all the tracks in the other list to the end of this list. 
