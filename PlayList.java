@@ -35,8 +35,12 @@ class PlayList {
      *  If the list is full, does nothing and returns false.
      *  Otherwise, appends the track and returns true. */
     public boolean add(Track track) {
-        if (size >= maxSize){return false;} 
-        else{tracks[size] = track; return true;}
+        if (size >= maxSize){
+            return false;
+        } 
+        else{
+            tracks[size] = track; 
+            return true;}
     }
 
     /** Returns the data of this list, as a string. Each track appears in a separate line. */
@@ -52,22 +56,30 @@ class PlayList {
 
     /** Removes the last track from this list. If the list is empty, does nothing. */
      public void removeLast() {
-        if (size != 0){
+        if (size > 0){
             tracks[size - 1] = null;
+            size--;
         }
 
     }
     
     /** Returns the total duration (in seconds) of all the tracks in this list.*/
     public int totalDuration() {
-        //// replace the following statement with your code
-        return 0;
+        int seconds = 0;
+        for (int i = 0; i < size; i++){
+            seconds = seconds + tracks[i].getDuration();
+        }
+        return seconds;
     }
 
     /** Returns the index of the track with the given title in this list.
      *  If such a track is not found, returns -1. */
     public int indexOf(String title) {
-        //// replace the following statement with your code
+        for (int i = 0; i < size; i++){
+            if (title.equals(tracks[size].getTitle())){
+                return i;
+            }
+        }
         return -1;
     }
 
