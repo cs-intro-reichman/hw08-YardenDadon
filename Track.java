@@ -1,11 +1,17 @@
 /** Represents a music track. A track has a title (String), an artist (String), 
  *  and a duration (int), in seconds. */
 class Track {
+    //First variables dictate all possible "inputs" from calling the Track function
     private String title;
     private String artist;
     private int duration;
 
     /** Constructs a track from the given values. */
+    //Having Track(x, y, z) lets you give parameters from calling the function
+    //this.title refers to the private title. Meaning for each object "track"
+    //we make, it keeps the value that you inputted in.
+    //"title" comes from input, input title gets assigned to this.title, then
+    //this.title can be used throughout the specific object.
     public Track(String title, String artist, int duration) {
         this.title = title;
         this.artist = artist;

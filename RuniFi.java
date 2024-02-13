@@ -13,6 +13,9 @@ class RuniFi {
         Track track4 = new Track("Thriller", "Michael Jackson", 222);
         Track track5 = new Track("Yesterday", "The Beatles", 125);
       
+
+        //System.out.println(track4.isShorterThan(track3));}
+
         // Adds the tracks to the List
         System.out.println("Adding tracks...");
         myList.add(track1);

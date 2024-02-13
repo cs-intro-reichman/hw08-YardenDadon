@@ -35,11 +35,10 @@ class PlayList {
      *  If the list is full, does nothing and returns false.
      *  Otherwise, appends the track and returns true. */
     public boolean add(Track track) {
-        if (size >= maxSize){
-            return false;
-        } 
+        if (size == maxSize){return false;}
         else{
-            tracks[size] = track; 
+            tracks[size] = track; //if playlist is size = 0, puts song at index = 0
+            size ++; //Cause theres a song in it now
             return true;}
     }
 
@@ -90,27 +89,56 @@ class PlayList {
      *  is full, does nothing and returns false. Otherwise, inserts the track and
      *  returns true. */
     public boolean add(int i, Track track) {
-        //// replace the following statement with your code
-        return false;
+        if (size == maxSize || i > maxSize || i < 0){
+            return false;
+        }
+
+        if (size == 0 || i == size) {
+            add(track);
+        } 
+        else {
+            for (int j = size; j > i; j--) {
+                tracks[j] = tracks[j - 1];
+            }
+            tracks[i] = track;
+            size++;
+        }
+        return true;
     }
      
     /** Removes the track in the given index from this list.
      *  If the list is empty, or the given index is negative or too big for this list, 
      *  does nothing and returns -1. */
     public void remove(int i) {
-        //// replace this comment with your code
+        if (size == maxSize || i > maxSize || i < 0) {
+            return;
+        }
+        if (i < size && i >= 0){
+            for (int j = i; j < size ; j++){
+                tracks[j] = tracks[j+1];
+            }
+            size--;
+        }
     }
 
     /** Removes the first track that has the given title from this list.
      *  If such a track is not found, or the list is empty, or the given index
      *  is negative or too big for this list, does nothing. */
     public void remove(String title) {
-        //// replace this comment with your code
+        if (indexOf(title) != -1) {
+            remove(indexOf(title));
+        }
     }
 
     /** Removes the first track from this list. If the list is empty, does nothing. */
     public void removeFirst() {
-        //// replace this comment with your code
+        if (size > 0) {
+            for (int i = 0; i < size - 1; i++) {
+                tracks[i] = tracks[i+1];
+            }
+            tracks[size - 1] = null;
+            size--;
+        }
     }
     
     /** Adds all the tracks in the other list to the end of this list. 
