@@ -138,9 +138,9 @@ class PlayList {
     /** Adds all the tracks in the other list to the end of this list. 
      *  If the total size of both lists is too large, does nothing. */
     //// An elegant and terribly inefficient implementation.
-     public void add(PlayList other) {
-        if (size + other.size <= maxSize){
-            for (int i = size, j = 0; i < maxSize; i++, j++){
+    public void add(PlayList other) {
+        for (int i = size, j = 0; i < size + other.size; i++, j++){
+            if (size + other.size <= maxSize - j){
                 add(i, other.getTrack(j));
             }
         }
@@ -156,13 +156,16 @@ class PlayList {
         if (start < 0 || start > size - 1){
             return -1;
         } else {
-            int minTemp = tracks[start].getDuration();
+            int minTemp = tracks[start].getDuration(); //seconds of the chosen song
+            int indexTemp = start;
             for (int i = start; i < size; i++){
-                if (tracks[i].isShorterThan(tracks[i+1]) == true && tracks[i].getDuration() < minTemp){
-                    minTemp = i;
+              //  if (tracks[i].isShorterThan(tracks[i+1]) == true && tracks[i].getDuration() < minTemp){
+                if (tracks[i].getDuration() < minTemp){
+                    minTemp = tracks[i].getDuration();
+                    indexTemp = i;
                 }
             }
-            return minTemp;
+            return indexTemp;
         }     
     }
 
@@ -184,6 +187,13 @@ class PlayList {
             temp = tracks[minIndex(i)];
             tracks[minIndex(i)] = tracks[i];
             tracks[i] = temp;
+            //System.out.println(minIndex(i));
+            // System.out.println(tracks[0]);
+            // System.out.println(tracks[1]);
+            // System.out.println(tracks[2]);
+            // System.out.println(tracks[3]);
+            // System.out.println(tracks[4]);
+            // System.out.println("");
        }
     }
 }
