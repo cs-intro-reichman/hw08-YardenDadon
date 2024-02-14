@@ -45,14 +45,12 @@ class PlayList {
     /** Returns the data of this list, as a string. Each track appears in a separate line. */
     //// For an efficient implementation, use StringBuilder.
     public String toString() {
-        StringBuilder word = new StringBuilder(); 
-
-        for (int i = 0; i < tracks.length; i++) {
-            Track track = tracks[i];
-            word.append(track.toString());
-            word.append(System.lineSeparator());
+        StringBuilder strB = new StringBuilder();
+        for (int i = 0; i < size; i++) {
+            strB.append(tracks[i]);
+            strB.append("\n");
         }
-        return word.toString(); //toString makes the track a string
+        return strB.toString();
     }
 
     /** Removes the last track from this list. If the list is empty, does nothing. */
@@ -141,18 +139,31 @@ class PlayList {
      *  If the total size of both lists is too large, does nothing. */
     //// An elegant and terribly inefficient implementation.
      public void add(PlayList other) {
-        //// replace this comment with your code
+        if (size + other.size <= maxSize){
+            for (int i = size, j = 0; i < maxSize; i++, j++){
+                add(i, other.getTrack(j));
+            }
+        }
     }
 
     /** Returns the index in this list of the track that has the shortest duration,
      *  starting the search in location start. For example, if the durations are 
-     *  7, 1, 6, 7, 5, 8, 7, then min(2) returns 4, since this the index of the 
+     *  7, 1, 6, 7, 5, 8, 7, then min(2) returns 4, since this is the index of the 
      *  minimum value (5) when starting the search from index 2.  
      *  If start is negative or greater than size - 1, returns -1.
      */
     private int minIndex(int start) {
-        //// replace the following statement with your code
-        return 0;
+        if (start < 0 || start > size - 1){
+            return -1;
+        } else {
+            int minTemp = tracks[start].getDuration();
+            for (int i = start; i < size; i++){
+                if (tracks[i].isShorterThan(tracks[i+1]) == true && tracks[i].getDuration() < minTemp){
+                    minTemp = i;
+                }
+            }
+            return minTemp;
+        }     
     }
 
     /** Returns the title of the shortest track in this list. 
@@ -168,6 +179,11 @@ class PlayList {
     public void sortedInPlace() {
         // Uses the selection sort algorithm,  
         // calling the minIndex method in each iteration.
-        //// replace this statement with your code
+        Track temp = new Track("", "", 0);
+        for (int i = 0; i < size; i++){
+            temp = tracks[minIndex(i)];
+            tracks[minIndex(i)] = tracks[i];
+            tracks[i] = temp;
+       }
     }
 }
