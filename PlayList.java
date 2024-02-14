@@ -35,32 +35,49 @@ class PlayList {
      *  If the list is full, does nothing and returns false.
      *  Otherwise, appends the track and returns true. */
     public boolean add(Track track) {
-        //// replace the following statement with your code
-        return true;
+        if (size == maxSize){return false;}
+        else{
+            tracks[size] = track; //if playlist is size = 0, puts song at index = 0
+            size ++; //Cause theres a song in it now
+            return true;}
     }
 
     /** Returns the data of this list, as a string. Each track appears in a separate line. */
     //// For an efficient implementation, use StringBuilder.
     public String toString() {
-        //// replace the following statement with your code
-        return "";
+        StringBuilder strB = new StringBuilder();
+        for (int i = 0; i < size; i++) {
+            strB.append(tracks[i]);
+            strB.append("\n");
+        }
+        return strB.toString();
     }
 
     /** Removes the last track from this list. If the list is empty, does nothing. */
      public void removeLast() {
-        //// replace this comment with your code
+        if (size != 0) {
+            tracks[size] = null; //Removes the track
+            size--; //Playlist is one song smaller
+        }
     }
     
     /** Returns the total duration (in seconds) of all the tracks in this list.*/
     public int totalDuration() {
-        //// replace the following statement with your code
-        return 0;
+        int duration = 0;
+        for (int i = 0; i < size; i++){
+            duration += tracks[i].getDuration();
+        }
+        return duration;
     }
 
     /** Returns the index of the track with the given title in this list.
      *  If such a track is not found, returns -1. */
     public int indexOf(String title) {
-        //// replace the following statement with your code
+        for (int i = 0; i < size; i++){
+            if (title.equals(tracks[i].getTitle())){
+                return i;
+            }
+        }
         return -1;
     }
 
@@ -70,46 +87,86 @@ class PlayList {
      *  If i is negative or greater than the size of this list, or if the list
      *  is full, does nothing and returns false. Otherwise, inserts the track and
      *  returns true. */
-    public boolean add(int i, Track track) {
-        //// replace the following statement with your code
-        return false;
-    }
+    public boolean add(int i, Track track) { //i = where i want the song in the playlist
+        if (i < 0 || i > maxSize || size == maxSize){ //index of negative, bigger than playlist, at maxSize
+            return false;
+        }
+        if (size == 0|| i == size){ //if empty or adding song to the end of the playlist
+            add(track); //Side Affect: size++
+        } else{
+            for (int variable = size; variable > i; variable--){ //If adding a song in index2, all songs above move one up
+                tracks[variable] = tracks[variable - 1];
+            }
+            tracks[i] = track; //add the songs in the hole left at index i
+            size++;
+        }
+        return true;
+       }
+    
      
     /** Removes the track in the given index from this list.
      *  If the list is empty, or the given index is negative or too big for this list, 
      *  does nothing and returns -1. */
     public void remove(int i) {
-        //// replace this comment with your code
+        if (size == 0 || i < 0 || i > maxSize){
+            return;
+        }else {
+            tracks[i] = null; //make a hole
+            for (int variable = i; variable < size; variable++){ //Starting at the hole (i), every song above goes down 1
+            tracks[variable] = tracks[variable + 1];
+            }
+            size--; //shrink playlist
+        }
     }
 
     /** Removes the first track that has the given title from this list.
      *  If such a track is not found, or the list is empty, or the given index
      *  is negative or too big for this list, does nothing. */
     public void remove(String title) {
-        //// replace this comment with your code
+        if (indexOf(title) != -1){ //if "title" is in the playlist
+            remove(indexOf(title)); //remove it
+        }
     }
 
     /** Removes the first track from this list. If the list is empty, does nothing. */
     public void removeFirst() {
-        //// replace this comment with your code
+       if (size != 0){
+        remove(0);
+       }
     }
     
     /** Adds all the tracks in the other list to the end of this list. 
      *  If the total size of both lists is too large, does nothing. */
     //// An elegant and terribly inefficient implementation.
-     public void add(PlayList other) {
-        //// replace this comment with your code
+    public void add(PlayList other) {
+        for (int i = size, j = 0; i < size + other.size; i++, j++){
+            if (size + other.size <= maxSize - j){
+                add(i, other.getTrack(j));
+            }
+        }
     }
 
     /** Returns the index in this list of the track that has the shortest duration,
      *  starting the search in location start. For example, if the durations are 
-     *  7, 1, 6, 7, 5, 8, 7, then min(2) returns 4, since this the index of the 
+     *  7, 1, 6, 7, 5, 8, 7, then min(2) returns 4, since this is the index of the 
      *  minimum value (5) when starting the search from index 2.  
      *  If start is negative or greater than size - 1, returns -1.
      */
     private int minIndex(int start) {
-        //// replace the following statement with your code
-        return 0;
+        if (start < 0 || start > size - 1){
+            return -1;
+        } else {
+            int minTemp = tracks[start].getDuration(); //seconds of the chosen song
+            int indexTemp = start;
+            for (int i = start; i < size; i++){
+              //  if (tracks[i].isShorterThan(tracks[i+1]) == true && tracks[i].getDuration() < minTemp){
+                if (tracks[i].getDuration() < minTemp){
+                    minTemp = tracks[i].getDuration();
+                    indexTemp = i;
+                }
+            }
+            return indexTemp;
+        }     
     }
 
     /** Returns the title of the shortest track in this list. 
@@ -125,6 +182,18 @@ class PlayList {
     public void sortedInPlace() {
         // Uses the selection sort algorithm,  
         // calling the minIndex method in each iteration.
-        //// replace this statement with your code
+        Track temp = new Track("", "", 0);
+        for (int i = 0; i < size; i++){
+            temp = tracks[minIndex(i)];
+            tracks[minIndex(i)] = tracks[i];
+            tracks[i] = temp;
+            //System.out.println(minIndex(i));
+            // System.out.println(tracks[0]);
+            // System.out.println(tracks[1]);
+            // System.out.println(tracks[2]);
+            // System.out.println(tracks[3]);
+            // System.out.println(tracks[4]);
+            // System.out.println("");
+       }
     }
 }
